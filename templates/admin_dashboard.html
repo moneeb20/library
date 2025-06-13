@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>لوحة تحكم المدير</title>
+</head>
+<body>
+    <h1>مرحباً بك في لوحة تحكم المدير</h1>
+
+    <h2>الكتب</h2>
+    <table border="1">
+        <tr><th>ID</th><th>العنوان</th><th>المؤلف</th><th>السعر</th></tr>
+        {% for book in books %}
+            <tr>
+                <td>{{ book[0] }}</td>
+                <td>{{ book[1] }}</td>
+                <td>{{ book[2] }}</td>
+                <td>{{ book[3] }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <h2>الموظفون (Moderators)</h2>
+    <table border="1">
+        <tr><th>ID</th><th>الاسم</th><th>البريد</th></tr>
+        {% for mod in moderators %}
+            <tr>
+                <td>{{ mod[0] }}</td>
+                <td>{{ mod[1] }}</td>
+                <td>{{ mod[2] }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <a href="{{ url_for('logout') }}">تسجيل الخروج</a>
+</body>
+</html>

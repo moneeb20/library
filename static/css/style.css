@@ -1,0 +1,231 @@
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      direction: rtl;
+      background-color: #EBF2D5;
+    }
+
+    header,
+    footer {
+      background-color: #244f76;
+      color: white;
+      text-align: center;
+      padding: 20px 10px;
+    }
+
+    nav {
+      background-color: #52859e;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    nav a:hover {
+      background-color: #9AD0c2;
+      color: #244f76;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .search-bar {
+      background-color: #dcebe4;
+      padding: 15px;
+      text-align: center;
+      position: sticky;
+      z-index: 1000;
+    }
+
+    .search-bar input,
+    .search-bar select {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 24px;
+    }
+ 
+
+    .search-bar .btn {
+      background-color: #244f76;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+
+    .container {
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .book {
+      background-color: white;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: row;
+      gap: 15px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .book:hover {
+      background-color: #9AD0c2;
+      transform: scale(1.03);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .book img {
+      width: 150px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+      width: 250px;
+      height: 350px;
+    }
+
+    .label {
+      display: inline-block;
+      background-color: #244f76;
+      color: white;
+      padding: 4px 8px;
+      border-radius: 5px;
+      font-size: 0.9em;
+      margin-top: 5px;
+      margin-left: 5px;
+      font-size: 20px;
+    }
+
+    .label-free {
+      background-color: #7fb77e;
+      font-size: 20px;
+    }
+
+    .label-paid {
+      background-color: #b85450;
+      font-size: 20px;
+    }
+
+    .btn-download {
+      margin-top: 10px;
+      background-color: #52859e;
+      color: white;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 250px;
+      font-size: 22px;
+    }
+    .btn-buy {
+      margin-top: 10px;
+      background-color: #b15514;
+      color: white;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 200px;
+      font-size: 22px;
+    }
+    .stars {
+      color: gold;
+      font-size: 1.2em;
+      margin-top: 5px;
+    }
+
+    .favorite {
+      cursor: pointer;
+      font-size: 1.6em;
+      color: #ccc;
+      margin-right: 10px;
+      position: relative;
+    }
+
+    .favorite.active {
+      color: red;
+    }
+
+    .description-popup {
+      max-height: 60px;
+      overflow: hidden;
+      background-color: #f2f9f7;
+      padding: 10px;
+      border-radius: 6px;
+      margin-top: 8px;
+      transition: max-height 0.3s ease, background-color 0.3s, color 0.3s;
+      color: #333;
+    }
+
+    .description-popup.expanded {
+      max-height: 300px;
+      background-color: #244f76;
+      color: white;
+    }
+
+    .toggle-description-btn {
+      background-color: transparent;
+      color: #244f76;
+      border: 1px solid #244f76;
+      padding: 4px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .toggle-description-btn:hover {
+      background-color: #244f76;
+      color: white;
+    }
+    .title{
+      font-size: 25px;
+      color: #244F76;
+    }
+footer{
+   background-color: #244f76;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+    a{
+      text-decoration: none;
+    }
+.alert {
+  padding: 10px;
+  margin: 10px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+.alert-success { background-color: #d4edda; color: #155724; }
+.alert-error { background-color: #f8d7da; color: #721c24; }
+.alert-info { background-color: #d1ecf1; color: #0c5460; }
+
+   .btnsearch{
+      width: 100px;
+      height: 50px;
+      font-size: 25px;
+      background-color:   #52859E;
+      transition: 0.3s;
+    }
+       .btnsearch:hover{
+       background-color: #244F76;
+       }

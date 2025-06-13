@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/stylemoder.css') }}">
+  <link rel="stylesheet" href="../static/css/stylemodercdn.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+    .flash-message {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+    }
+</style>
+
+  <title>لوحة تحكم المدير</title>
+</head>
+<body>
+
+  <header>
+    <h1>لوحة تحكم المدير</h1>
+  </header>
+
+  <nav>
+    <a href="{{ url_for('index') }}">الرئيسية</a>
+    <a href="{{ url_for('books') }}">الكتب</a>
+    <a href="{{ url_for('moder') }}">لوحة التحكم</a>
+    <a href="{{ url_for('support') }}">الدعم الفني</a>
+    <a href="{{ url_for('profile') }}">الملف الشخصي</a>
+ 
+  </nav>
+
+  <div class="container">
+    <h2 class="section-title">إدارة النظام</h2>
+    <div class="grid">
+
+      <!-- قسم إدارة الكتب -->
+      <div class="card">
+        <h3>إدارة الكتب</h3>
+        <p>يمكنك إدخال كتاب جديد لعرضه في المكتبة.</p>
+        <div class="btns">
+          <a href="{{ url_for('show_books') }}" class="btn">عرض الكتب</a>
+          <a href="{{ url_for('add_book_page') }}" class="btn">إضافة كتاب</a>
+          <a href="{{ url_for('delete_book_page') }}" class="btn">حذف كتاب</a>
+        </div>
+      </div>
+
+      <!-- قسم إدارة المستخدمين -->
+      <div class="card">
+        <h3>إدارة المستخدمين</h3>
+        <p>عرض وتعديل بيانات المستخدمين المسجلين.</p>
+        <div class="btns">
+          <a href="{{ url_for('show_users') }}" class="btn btn2">عرض المستخدمين</a>
+          <a href="{{ url_for('add_user_page') }}" class="btn btn2">اضافة مستخدم</a>
+          <a href="{{ url_for('delete_user_page') }}" class="btn btn2">حذف مستخدم</a>
+          <a href="{{ url_for('change_role_page') }}" class="btn btn2">تغيير صلاحيات مستخدم</a>
+        </div>
+      </div>
+
+      <!-- قسم الطلبات -->
+      <div class="card">
+        <h3>الطلبات والمشتريات</h3>
+        <p>مراجعة الطلبات والشراءات المسجلة في النظام.</p>
+        <a href="{{ url_for('show_orders') }}" class="btn">عرض الطلبات</a>
+      </div>
+
+      <!-- قسم الدعم الفني -->
+      <div class="card">
+        <h3>الدعم الفني</h3>
+        <p>مراجعة الطلبات أو البلاغات الفنية المرسلة.</p>
+        <a href="{{ url_for('show_support_messages') }}" class="btn">عرض الرسائل</a>
+      </div>
+    </div>
+
+    <!-- قسم عرض النتائج -->
+    {% if show_results %}
+    <div class="results-section">
+      <h3>{{ results_title }}</h3>
+      <div class="table-container">
+        {{ results_table | safe }}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- قسم النماذج -->
+    {% if show_form %}
+    <div class="form-section">
+      <h3>{{ form_title }}</h3>
+      <form method="POST" action="{{ form_action }}">
+        {{ form_content | safe }}
+        <button type="submit" class="btn">{{ submit_btn_text }}</button>
+      </form>
+    </div>
+    {% endif %}
+
+    <!-- نافذة عرض رسائل الدعم -->
+    {% if show_support_messages %}
+    <div id="supportModal" class="modal" style="display: block;">
+      <div class="modal-content">
+        <span class="close" onclick="window.location.href='{{ url_for('moder') }}'">&times;</span>
+        <h2>رسائل الدعم الفني</h2>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>الاسم</th>
+                <th>البريد</th>
+                <th>الموضوع</th>
+                <th>الرسالة</th>
+                <th>التاريخ</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for msg in support_messages %}
+              <tr>
+                <td>{{ msg.name }}</td>
+                <td>{{ msg.email }}</td>
+                <td>{{ msg.subject }}</td>
+                <td>{{ msg.message }}</td>
+                <td>{{ msg.message_date }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+
+  <footer>
+    &copy; 2025 جميع الحقوق محفوظة - لوحة تحكم المدير
+  </footer>
+<script>
+  function openModal() {
+    fetch('/get-support-messages')
+      .then(response => response.json())
+      .then(data => {
+        const body = document.getElementById("modalMessagesBody");
+        body.innerHTML = "";
+
+        if (data.length === 0) {
+          body.innerHTML = "<tr><td colspan='5'>لا توجد رسائل حالياً.</td></tr>";
+        } else {
+          data.forEach(msg => {
+            const row = `<tr>
+              <td>${msg.name}</td>
+              <td>${msg.email}</td>
+              <td>${msg.subject}</td>
+              <td>${msg.message}</td>
+              <td>${msg.message_date}</td>
+            </tr>`;
+            body.innerHTML += row;
+          });
+        }
+
+        document.getElementById("supportModal").style.display = "block";
+      });
+  }
+
+  function closeModal() {
+    document.getElementById("supportModal").style.display = "none";
+  }
+
+  // إغلاق النافذة عند الضغط خارجها
+  window.onclick = function(event) {
+    const modal = document.getElementById("supportModal");
+    if (event.target === modal) {
+      modal.style.display = "none";
+    }
+  }
+</script>
+<script>
+    // عرض الإشعارات المنبثقة
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                Swal.fire({
+                    icon: '{{ "success" if category == "success" else "error" }}',
+                    title: '{{ message }}',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</script>
+
+
+</body>
+</html>

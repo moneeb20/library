@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styleprofile.css') }}">
+  <title>الملف الشخصي</title>
+</head>
+<body>
+
+  <header>
+    <h1>الملف الشخصي</h1>
+  </header>
+
+  <nav>
+    <a href="{{ url_for('index') }}">الرئيسية</a>
+    <a href="{{ url_for('books') }}">الكتب</a>
+    <a href="{{ url_for('support') }}">الدعم الفني</a>
+    <a href="{{ url_for('moder') }}" id="moderlink">لوحة التحكم</a>
+    <a href="{{ url_for('profile') }}">الملف الشخصي</a>
+  </nav>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+  <div class="profile-container">
+    <div class="profile-info">
+      <h2>مرحباً، {{ name }}</h2>
+      <p><span class="highlight">البريد الإلكتروني:</span> {{ email }}</p>
+      
+      <p><span class="highlight">عدد الكتب المجانية:</span> {{ free_books | length }}</p>
+      {% if free_books %}
+        <ul>
+          {% for book in free_books %}
+  <li>
+    <a href="{{ url_for('static', filename='books/' + book.digital_file) }}" download>{{ book.title }}</a>
+  </li>
+{% endfor %}
+
+{% for book in paid_books %}
+  <li>
+    <a href="{{ url_for('static', filename='books/' + book.digital_file) }}" download>{{ book.title }}</a>
+  </li>
+{% endfor %}
+        </ul>
+      {% else %}
+        <p>لا توجد كتب مدفوعة.</p>
+      {% endif %}
+
+      <div class="separator"></div>
+    </div>
+
+    <div class="options">
+      <button class="btn" onclick="showEditPopup()">تعديل المعلومات</button>
+      <button class="btn" onclick="showPasswordPopup()">تغيير كلمة المرور</button>
+      <button class="btn" onclick="showLogoutPopup()">تسجيل الخروج</button>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 جميع الحقوق محفوظة - المكتبة الإلكترونية
+  </footer>
+
+  <!-- النوافذ المنبثقة -->
+  <div class="popup-overlay" id="popup">
+    <div class="popup-box">
+      <p>هل أنت متأكد أنك تريد تسجيل الخروج؟</p>
+      <button class="btn" onclick="logout()">نعم، تسجيل الخروج</button>
+      <button class="btn" onclick="hideLogoutPopup()">إلغاء</button>
+    </div>
+  </div>
+
+  <div class="popup-overlay" id="editPopup">
+    <div class="popup-box">
+      <p>سيتم تحويلك إلى صفحة تعديل المعلومات لاحقاً</p>
+      <button class="btn" onclick="hideEditPopup()">حسناً</button>
+    </div>
+  </div>
+
+  <div class="popup-overlay" id="passwordPopup">
+    <div class="popup-box">
+      <p>سيتم تحويلك إلى صفحة تغيير كلمة المرور لاحقاً</p>
+      <button class="btn" onclick="hidePasswordPopup()">حسناً</button>
+    </div>
+  </div>
+
+  <script>
+    function showLogoutPopup() {
+      document.getElementById("popup").style.display = "flex";
+    }
+
+    function hideLogoutPopup() {
+      document.getElementById("popup").style.display = "none";
+    }
+
+    function logout() {
+      window.location.href = "{{ url_for('logout') }}";
+    }
+
+    function showEditPopup() {
+      document.getElementById("editPopup").style.display = "flex";
+    }
+
+    function hideEditPopup() {
+      document.getElementById("editPopup").style.display = "none";
+    }
+
+    function showPasswordPopup() {
+      document.getElementById("passwordPopup").style.display = "flex";
+    }
+
+    function hidePasswordPopup() {
+      document.getElementById("passwordPopup").style.display = "none";
+    }
+  </script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const moderLink = document.getElementById("moderLink");
+
+    if (moderLink) {
+      moderLink.addEventListener("click", function (e) {
+        e.preventDefault();  // منع الانتقال
+
+        // جلب نوع المستخدم من الجلسة (تمرير من بايثون إلى HTML)
+        const userType = "{{ session.get('user_type', 'guest') }}";
+
+        if (userType === "admin" || userType === "moderator") {
+          window.location.href = "/moder";
+        } else {
+          showAlert("🚫 ليس لديك صلاحيات للوصول إلى لوحة التحكم.");
+        }
+      });
+    }
+
+    function showAlert(message) {
+      const existing = document.getElementById("customAlert");
+      if (existing) existing.remove();
+
+      const alertBox = document.createElement("div");
+      alertBox.id = "customAlert";
+      alertBox.innerHTML = message;
+      alertBox.style.cssText = `
+        background-color: #ffdddd;
+        color: #a94442;
+        padding: 15px;
+        margin: 20px;
+        border: 1px solid #f5c6cb;
+        border-radius: 5px;
+        text-align: center;
+        font-weight: bold;
+      `;
+      document.body.prepend(alertBox);
+
+      setTimeout(() => {
+        alertBox.remove();
+      }, 4000);
+    }
+  });
+</script>
+</body>
+</html>

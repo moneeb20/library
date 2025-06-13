@@ -1,0 +1,134 @@
+
+
+    html,body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      direction: rtl;
+      background-color: #EBF2D5;
+      color: #244f76;
+      height: auto;
+      height: 100%;
+      position: relative;
+ 
+    }
+    header, footer {
+      background-color: #244f76;
+      color: white;
+      text-align: center;
+      padding: 15px;
+   
+    }
+    nav {
+      background-color: #52859e;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 8px 15px;
+      border-radius: 6px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    nav a:hover {
+      background-color: #9AD0C2;
+      color: #244f76;
+    }
+    .container {
+      max-width: 600px;
+      margin: 30px auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 2px 2px 25px rgba(0,0,0,0.1);
+      transition: box-shadow 0.3s;
+      padding-left: 20px;
+    }
+    .container:hover {
+      box-shadow: 0 0 20px rgba(36, 79, 118, 0.3);
+    }
+    h2 {
+      text-align: center;
+      color: #244f76;
+    }
+    form label {
+      margin-bottom: 5px;
+      display: block;
+      font-weight: bold;
+    }
+    form input, form textarea, form button {
+      width: 100%;
+      margin-bottom: 15px;
+      margin-left: 5px;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    form input:focus, form textarea:focus {
+      border-color: #52859e;
+      box-shadow: 0 0 5px rgba(82, 133, 158, 0.5);
+      outline: none;
+    }
+    .btn {
+      background-color: #9AD0C2;
+      color: #244f76;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .btn:hover {
+      background-color: #52859e;
+      color: white;
+    }
+    .alert {
+      padding: 15px;
+      margin-top: 20px;
+      border-radius: 6px;
+      font-weight: bold;
+      display: none;
+    }
+    .alert.success {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    .alert.error {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+
+   
+
+    .custom-swal-popup {
+        font-family: 'Tahoma', Arial, sans-serif;
+        font-size: 1.1rem;
+    }
+    
+    .swal2-container {
+        z-index: 99999 !important;
+    }
+    
+    /* لتوسيط النص في الإشعار */
+    .swal2-title {
+        text-align: center;
+        padding: 0 20px;
+    }
+    .custom-swal-button {
+    background-color: #244f76 !important;
+    color: white !important;
+    padding: 8px 20px !important;
+    border-radius: 5px !important;
+    font-size: 1rem !important;
+    border: none !important;
+}
+
+.custom-swal-button:hover {
+    background-color: #52859e !important;
+}
+
+   

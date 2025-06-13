@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8" />
+    <title>إنشاء حساب</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styleform.css') }}"></head>
+<body>
+    <form method="post">
+        <h2>إنشاء حساب</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <input type="text" name="name" placeholder="الاسم الكامل" required />
+        <input type="email" name="email" placeholder="البريد الإلكتروني" required />
+        <input type="password" name="password" placeholder="كلمة المرور" required />
+        <button type="submit">تسجيل</button>
+
+        <p>لديك حساب؟ <a href="{{ url_for('login') }}">تسجيل الدخول</a></p>
+    </form>
+</body>
+</html>

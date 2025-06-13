@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <title>الكتب - المكتبة الإلكترونية</title>
+  <link rel="stylesheet" href="../static/css/style.css">
+</head>
+<body>
+  <header><h1>الكتب المتوفرة في المكتبة</h1>
+  <style>
+.flash-messages {
+  margin: 20px auto;
+  padding: 10px;
+  width: 90%;
+  max-width: 600px;
+}
+.alert {
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.alert-success { background-color: #d4edda; color: #155724; }
+.alert-error { background-color: #f8d7da; color: #721c24; }
+.alert-info { background-color: #d1ecf1; color: #0c5460; }
+</style>
+  </header>
+
+  <nav>
+    <a href="{{ url_for('index') }}">الرئيسية</a>
+      <a href="{{ url_for('books') }}">الكتب</a>
+      <a href="{{ url_for('login') }}">تسجيل الدخول</a>
+      <a href="{{ url_for('support') }}" >الدعم الفني</a>
+      <a href="{{ url_for('moder') }}" id="moderLink">لوحة التحكم</a>
+      <a href="{{ url_for('profile') }}">الملف الشخصي</a>
+  </nav>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+  <div class="search-bar">
+    <form action="{{ url_for('books') }}" method="get">
+        <input type="text" name="title" placeholder="ابحث باسم الكتاب" value="{{ search_title }}">
+        <input type="text" name="author" placeholder="ابحث باسم المؤلف" value="{{ search_author }}">
+        <select name="category">
+            <option value="">كل التصنيفات</option>
+            {% for cat in categories %}
+                <option value="{{ cat.id }}" 
+                    {% if selected_category == cat.id|string %}selected{% endif %}>
+                    {{ cat.name }}
+                </option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn btnsearch">بحث</button>
+    </form>
+</div>
+
+  <div class="container">
+    {% for book in books %}
+    <div class="book">
+<img src="{{ url_for('static', filename='img/' + book.cover_image) }}" alt="{{ book.title }}">      <div class="book-content">
+        <h3 class="title">{{ book.title }} <span class="favorite" onclick="toggleFavorite(this)">♡</span></h3>
+        <p>المؤلف: {{ book.author }}</p>
+        <p>التصنيف: {{ book.category }}</p>
+        <span class="label">{{ book.book_type }}</span>
+       {% if book.price == 0 %}
+    <a href="{{ url_for('static', filename='books/' + book.digital_file) }}" class="btn-download" download>تحميل</a>
+{% elif 'user_id' in session and book.book_id in purchased_book_ids %}
+    <a href="{{ url_for('static', filename='books/' + book.digital_file) }}" class="btn-download" download>تحميل</a>
+{% elif 'user_id' in session %}
+    <form method="post" action="{{ url_for('buy_book', book_id=book.book_id) }}">
+        <button type="submit" class="btn-buy" onclick="alert('تم الشراء بنجاح')">شراء {{ book.price }} ل.س</button>
+    </form>
+{% else %}
+    <a href="{{ url_for('login') }}" class="btn-buy">
+      سجّل الدخول للدفع
+    </a>
+{% endif %}
+        <div class="description-popup">{{ book.description }}</div>
+        <button class="toggle-description-btn" onclick="toggleFullDescription(this)">عرض المزيد</button>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-messages">
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+  <footer>&copy; 2025 جميع الحقوق محفوظة - المكتبة الإلكترونية</footer>
+  <script src="../static/js/script.js"></script>
+ <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const moderLink = document.getElementById("moderLink");
+
+    if (moderLink) {
+      moderLink.addEventListener("click", function (e) {
+        e.preventDefault();  // منع الانتقال
+
+        // جلب نوع المستخدم من الجلسة (تمرير من بايثون إلى HTML)
+        const userType = "{{ session.get('user_type', 'guest') }}";
+
+        if (userType === "admin" || userType === "moderator") {
+          window.location.href = "/moder";
+        } else {
+          showAlert("🚫 ليس لديك صلاحيات للوصول إلى لوحة التحكم.");
+        }
+      });
+    }
+
+    function showAlert(message) {
+      const existing = document.getElementById("customAlert");
+      if (existing) existing.remove();
+
+      const alertBox = document.createElement("div");
+      alertBox.id = "customAlert";
+      alertBox.innerHTML = message;
+      alertBox.style.cssText = `
+        background-color: #ffdddd;
+        color: #a94442;
+        padding: 15px;
+        margin: 20px;
+        border: 1px solid #f5c6cb;
+        border-radius: 5px;
+        text-align: center;
+        font-weight: bold;
+      `;
+      document.body.prepend(alertBox);
+
+      setTimeout(() => {
+        alertBox.remove();
+      }, 4000);
+    }
+  });
+</script>
+</body>
+</html>
+
+

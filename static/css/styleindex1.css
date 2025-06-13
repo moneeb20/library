@@ -1,0 +1,311 @@
+
+    body {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+  direction: rtl;
+  background-color: #EBF2D5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+}
+
+header {
+  background-color: #244f76;
+  color: white;
+  padding-top: 20px;
+  text-align: center;
+  position: relative;
+ 
+}
+
+nav {
+  background-color: #52859e;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: 700;
+  transition: background-color 0.3s;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 25px;
+}
+
+nav a:hover {
+  background-color: #9AD0c2;
+  color: #244f76;
+}
+
+.search-bar {
+  background-color: #d9e9e4;
+  padding: 15px;
+  text-align: center;
+ 
+
+}
+
+.search-bar input,
+.search-bar select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 27px;
+  
+}
+
+.container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1;
+}
+
+.book {
+  background-color: white;
+  display: flex;
+  align-items: flex-start;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  gap: 20px;
+  transition: transform 0.3s ease;
+  flex-direction: row;
+  position: relative;
+  overflow: hidden;
+}
+
+.book:hover {
+  transform: translate(-8px);
+  background-color: #f0f7f3;
+}
+
+.book img {
+  width: 250px;
+  height: 300px;
+  border-radius: 6px;
+}
+
+.book-info h3 {
+  margin: 5px 0;
+  font-size: 25px;
+  color: #244f76;
+
+}
+.book-info  {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: start;
+
+  width: 400px;
+  height: 300px;
+
+}
+
+.book-info p {
+  margin: 3px 0;
+  font-size: 18px;
+}
+
+.badge {
+  background-color: #244f76;
+  color: white;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 17px;
+  display: inline-block;
+  margin: 2px 5px 2px 0;
+   padding: 4px;
+      border-radius: 10px;
+      font-size: 20px;
+}
+
+.btn {
+  background-color: #52859e;
+  color: white;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  width: 90px;
+  height: 50px;
+  margin-top: -3px;
+  font-size: 25px;
+}
+
+.btn:hover {
+  background-color: #244f76;
+}
+
+.description {
+  position: absolute;
+  top: 50%;
+  left: 10%;
+  transform: translate(80%) scale(0.95);
+  opacity: 0;
+  background-color: #EBF2D5;
+  color: #244f76;
+  width: 300px;
+  text-align: center;
+  font-size: 16px;
+  line-height: 1.8;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transition: opacity 1.2s ease, transform 1.2s ease;
+  z-index: 1;
+  pointer-events: none;
+  margin-left: 32%;
+}
+
+.book:hover .description {
+  opacity: 2;
+  transform: translate(1%,-50%) scale(1.1);
+}
+
+.rating .star {
+  color: #ccc;
+  font-size: 18px;
+  margin-left: 2px;
+}
+
+.rating .star.filled {
+  color: #FFD700;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.favorite-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #999;
+  position: relative;
+}
+
+.favorite-btn.active {
+  color: red;
+}
+
+.favorite-btn::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 120%;
+  background-color: #333;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+  font-size: 12px;
+  opacity: 0;
+  transform: translate(5px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+
+.favorite-btn:hover::after {
+  opacity: 1;
+  transform: translate(0);
+}
+
+footer {
+  background-color: #244f76;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+    .btn-download {
+      margin-top: 10px;
+      background-color: #52859e;
+      color: white;
+    
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 150px;
+      height: 60px;
+      display: flex;
+      font-size: 24px;
+      text-align: center;
+      text-decoration: none;
+      justify-content: center;
+      align-items: center;
+    }
+ 
+    .btn-buy{
+      margin-top: 10px;
+      background-color: #b35f38;
+      color: white;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width:150px;
+      height: 60px;
+      font-size: 24px;
+    }
+
+    .badge-paid{
+
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 17px;
+  display: inline-block;
+  margin: 2px 5px 2px 0;
+      background-color: red;
+      color: white;
+      padding: 3px;
+      border-radius: 10px;
+    }
+
+    .badge-free{
+
+      padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 17px;
+  display: inline-block;
+  margin: 2px 5px 2px 0;
+      background-color: rgb(13, 110, 11);
+      color: white;
+      padding: 4px;
+      border-radius: 10px;
+      font-size: 20px;
+       padding: 4px;
+      border-radius: 10px;
+      font-size: 20px;
+    }
+    a{
+      text-decoration: none;
+    }
+    .cate{
+      font-weight: 600;
+      font-size: 20px;
+      color:#14588f;
+    }
+ .alert {
+  padding: 10px;
+  margin: 10px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+.alert-success { background-color: #d4edda; color: #155724; }
+.alert-error { background-color: #f8d7da; color: #721c24; }
+.alert-info { background-color: #d1ecf1; color: #0c5460; }

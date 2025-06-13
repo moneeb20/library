@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/stylesupport.css') }}">
+    <link rel="stylesheet" href="../static/css/stylemodercdn.css">
+  <title>الدعم الفني</title>
+  <style>
+    .swal2-arabic {
+        font-family: 'Tahoma', Arial, sans-serif;
+        direction: rtl;
+    }
+    .swal2-confirm-arabic {
+        background-color: #244f76 !important;
+        padding: 8px 20px !important;
+    }
+</style>
+</head>
+<body>
+  <header><h1>الدعم الفني</h1></header>
+  
+  <nav>
+    <a href="{{ url_for('index') }}">الرئيسية</a>
+    <a href="{{ url_for('books') }}">الكتب</a>
+    <a href="{{ url_for('login') }}">تسجيل الدخول</a>
+    <a href="{{ url_for('support') }}">الدعم الفني</a>
+    <a href="{{ url_for('moder') }}" id="moderLink">لوحة التحكم</a>
+    <a href="{{ url_for('profile') }}">الملف الشخصي</a>
+  </nav>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+  <div class="container">
+    <h2>نموذج التواصل مع الدعم الفني</h2>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="alert success">
+          {{ messages[0] }}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form id="supportForm" method="post" action="{{ url_for('support') }}">
+      <label for="name">الاسم:</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="email">البريد الإلكتروني:</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="subject">الموضوع:</label>
+      <input type="text" id="subject" name="subject">
+
+      <label for="message">وصف المشكلة:</label>
+      <textarea id="message" name="message" rows="5" required></textarea>
+
+      <button class="btn" type="submit">إرسال</button>
+    </form>
+  </div>
+
+  <footer>&copy; 2025 المكتبة الإلكترونية</footer>
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const moderLink = document.getElementById("moderLink");
+
+    if (moderLink) {
+      moderLink.addEventListener("click", function (e) {
+        e.preventDefault();  // منع الانتقال
+
+        // جلب نوع المستخدم من الجلسة (تمرير من بايثون إلى HTML)
+        const userType = "{{ session.get('user_type', 'guest') }}";
+
+        if (userType === "admin" || userType === "moderator") {
+          window.location.href = "/moder";
+        } else {
+          showAlert("🚫 ليس لديك صلاحيات للوصول إلى لوحة التحكم.");
+        }
+      });
+    }
+
+    function showAlert(message) {
+      const existing = document.getElementById("customAlert");
+      if (existing) existing.remove();
+
+      const alertBox = document.createElement("div");
+      alertBox.id = "customAlert";
+      alertBox.innerHTML = message;
+      alertBox.style.cssText = `
+        background-color: #ffdddd;
+        color: #a94442;
+        padding: 15px;
+        margin: 20px;
+        border: 1px solid #f5c6cb;
+        border-radius: 5px;
+        text-align: center;
+        font-weight: bold;
+      `;
+      document.body.prepend(alertBox);
+
+      setTimeout(() => {
+        alertBox.remove();
+      }, 4000);
+    }
+  });
+</script>
+<!-- إشعارات SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    Swal.fire({
+                        position: 'center',
+                        icon: '{{ "success" if category == "success" else "error" }}',
+                        title: '{{ message }}',
+                        showConfirmButton: {{ 'false' if category == 'success' else 'true' }},
+                        confirmButtonText: 'موافق',
+                        timer: {{ 3000 if category == 'success' else 'null' }},
+                        customClass: {
+                            popup: 'swal2-arabic',
+                            confirmButton: 'swal2-confirm-arabic'
+                        }
+                    });
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    });
+</script>
+
+
+
+</body>
+</html>

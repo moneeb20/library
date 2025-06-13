@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styleindex1.css') }}">
+
+  <title>المكتبة الإلكترونية</title>
+  <style>
+.flash-messages {
+  margin: 20px auto;
+  padding: 10px;
+  width: 90%;
+  max-width: 600px;
+}
+.alert {
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.alert-success { background-color: #d4edda; color: #155724; }
+.alert-error { background-color: #f8d7da; color: #721c24; }
+.alert-info { background-color: #d1ecf1; color: #0c5460; }
+</style>
+</head>
+<body>
+  <header>
+    <h1>مرحباً بك في مكتبتنا الإلكترونية</h1>
+      <div class="fixed">
+    <nav>
+      <a href="{{ url_for('index') }}">الرئيسية</a>
+      <a href="{{ url_for('books') }}">الكتب</a>
+      <a href="{{ url_for('login') }}">تسجيل الدخول</a>
+      <a href="{{ url_for('support') }}">الدعم الفني</a>
+      <a href="{{ url_for('moder') }}" id="moderlink">لوحة التحكم</a>
+      <a href="{{ url_for('profile') }}">الملف الشخصي</a>
+    </nav>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+     <div class="search-bar">
+    <form action="{{ url_for('index') }}" method="get">
+        <input type="text" name="title" placeholder="ابحث باسم الكتاب" value="{{ request.args.get('title', '') }}">
+        <input type="text" name="author" placeholder="ابحث باسم المؤلف" value="{{ request.args.get('author', '') }}">
+        <select name="category">
+            <option value="">كل التصنيفات</option>
+            {% for cat in categories %}
+                <option value="{{ cat.id }}" 
+                    {% if selected_category == cat.id|string %}selected{% endif %}>
+                    {{ cat.name }}
+                </option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn">بحث</button>
+    </form>
+</div>
+  </div>
+  </header>
+
+
+
+
+
+<div class="container">
+    {% for book in books %}
+    <div class="book">
+        <img src="{{ url_for('static', filename='img/' + (book.cover_image or 'a.png')) }}" alt="غلاف الكتاب">
+        <div class="book-info">
+            <h3>{{ book.title }}</h3>
+            <p>المؤلف: {{ book.author }}</p>
+            <p class="cate">التصنيف: {{ book.category_name }}</p>
+            <div>
+                <span class="badge">{{ book.book_type }}</span>
+                {% if book.price == 0 %}
+                    <span class="badge-free">مجاني</span>
+                {% else %}
+                    <span class="badge-paid">{{ book.price }} ليرة </span>
+                {% endif %}
+            </div>
+            <div class="description">
+                {{ book.description[:150] }}...
+            </div>
+            <div class="actions">
+            {% if book.price == 0 %}
+    <a href="{{ url_for('static', filename='books/' + book.digital_file) }}" class="btn-download" download>تحميل</a>
+{% elif 'user_id' in session and book.book_id in purchased_book_ids %}
+    <a href="{{ url_for('static', filename='books/' + book.digital_file) }}" class="btn-download" download>تحميل</a>
+{% elif 'user_id' in session %}
+    <form method="post" action="{{ url_for('buy_book', book_id=book.book_id) }}">
+        <button type="submit" class="btn-buy" onclick="alert('تم الشراء بنجاح')">شراء {{ book.price }} ل.س</button>
+    </form>
+{% else %}
+    <a href="{{ url_for('login') }}" class="btn-buy">
+      سجّل الدخول للدفع
+    </a>
+{% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-messages">
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+  <footer>
+    &copy; 2025 جميع الحقوق محفوظة - المكتبة الإلكترونية
+  </footer>
+
+  <script>
+    document.querySelectorAll('.favorite-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const isActive = btn.classList.toggle('active');
+        btn.innerHTML = isActive ? '❤' : '♡';
+        btn.setAttribute('data-tooltip', isActive ? 'إزالة من المفضلة' : 'أضف إلى المفضلة');
+      });
+    });
+  </script>
+ <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const moderLink = document.getElementById("moderLink");
+    if (moderLink) {
+      moderLink.addEventListener("click", function (e) {
+        e.preventDefault();  // منع الانتقال نهائيًا
+        const userType = "{{ session.get('user_type', 'guest') }}";
+
+        if (userType === "admin" || userType === "moderator") {
+          window.location.href = "/moder";
+        } else {
+          showAlert("ليس لديك صلاحيات للوصول إلى لوحة التحكم.");
+        }
+      });
+    }
+
+    function showAlert(message) {
+      // تفادي التكرار
+      if (document.getElementById("authAlert")) return;
+
+      const alertBox = document.createElement("div");
+      alertBox.id = "authAlert";
+      alertBox.innerHTML = message;
+      alertBox.style.cssText = `
+        background-color: red;
+        color: #721c24;
+        padding: 12px;
+        margin: 10px auto;
+        max-width: 600px;
+        text-align: center;
+        border: 1px solid #f5c6cb;
+        border-radius: 5px;
+        font-weight: bold;
+        z-index: 1000;
+      `;
+      document.body.prepend(alertBox);
+
+      setTimeout(() => {
+        alertBox.remove();
+      }, 4000);
+    }
+  });
+</script>
+</body>
+</html>
